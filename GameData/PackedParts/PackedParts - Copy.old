@@ -1,0 +1,194 @@
++PART[fuelTankSmallFlat]:FOR[PackedParts]
+{
+	@name = PackedPartsTankSmall
+	@TechRequired = advConstruction
+	@category = Control
+	@cost = 16000
+	@title = PackedParts "Small" Module
+	@manufacturer = Bear's Bargin Bin
+	@description = While rumaging through the old Orbital ConstructoCorp (Scrap pile), came across a T100 tank and saw a T200 tank in the distance, "How to get more space on the inside?", you remember from your younger days you'd watch your favorite show DoctorKoo who had a Kartus "Bigger on the inside then the Outside" and since your not a KimeLord you decide to too the next best thing. Smash, err Compress the parts together.
+
+	// delete the LiquidFuel & Oxidizer node
+	!RESOURCE[LiquidFuel] {}    
+	!RESOURCE[Oxidizer] {}
+
+	RESOURCE
+	{
+		name = PackedParts
+		amount = 400
+		maxAmount = 400
+	}
+}
+
++PART[fuelTank4-2]:FOR[PackedParts]
+{
+	@name = PackedPartsTankMedium
+	@TechRequired = advConstruction
+	@category = Control
+	@cost = 16000
+	@title = PackedParts "Medium" Module
+	@manufacturer = Bear's Bargin Bin
+	@description = See "Small" module. More Compression.
+
+	// delete the LiquidFuel & Oxidizer node
+	-RESOURCE[LiquidFuel] {}    
+	-RESOURCE[Oxidizer] {}
+
+	RESOURCE
+	{
+		name = PackedParts
+		amount = 3000
+		maxAmount = 3000
+	}
+}
+
++PART[fuelTank1-2]:FOR[PackedParts]
+{
+	@name = PackedPartsTankLarge
+	@TechRequired = heavyRocketry
+	@category = Control
+	@cost = 16000
+	@title = PackedParts "Large" Module
+	@manufacturer = Bear's Bargin Bin
+	@description = See "Small" module. Even more Compression.
+
+	// delete the LiquidFuel & Oxidizer node
+	-RESOURCE[LiquidFuel] {}    
+	-RESOURCE[Oxidizer] {}
+
+	RESOURCE
+	{
+		name = PackedParts
+		amount = 12000
+		maxAmount = 12000
+	}
+}
+
++PART[large_tripleFuelTank]//:FOR[PackedParts]:Needs[KSPX]:AFTER[KSPX&PackedParts]
+{
+	@name = PackedPartsTankXLarge
+	@TechRequired = heavyRocketry
+	@category = Control
+	@cost = 16000
+	@title = PackedParts "Extra Large" Module
+	@manufacturer = Bear's Bargin Bin
+	@description = See "Small" module. The "Most" Compression.
+
+	// delete the LiquidFuel & Oxidizer node
+	-RESOURCE[LiquidFuel] {}    
+	-RESOURCE[Oxidizer] {}
+
+	RESOURCE
+	{
+		name = PackedParts
+		amount = 18000
+		maxAmount = 18000
+	}
+}
++Part[asasmodule1-2]//:FOR[PackedParts]:AFTER[Squad]
+{
+	@name = PartsPacker_Large
+	@TechRequired = heavyRocketry
+	@category = Control
+	@cost = 16000
+	@title = Large Packing Module
+	@manufacturer = Bear's Bargin Bin
+	@description = TBD
+
+	// delete the Module node
+	-Module[ModuleReactionWheel] {}
+}
++Part[advSasModule]//:FOR[PackedParts]:AFTER[Squad]
+{
+	@name = PartsPacker_Small
+	@TechRequired = heavyRocketry
+	@category = Control
+	@cost = 16000
+	@title = Small Packing Module
+	@manufacturer = Bear's Bargin Bin
+	@description = TBD
+
+	// delete the Module node
+	-Module[ModuleReactionWheel] {}
+}
+
+// Add Converter to all Packed Part Tanks.
+@Part[PartsPacker_*]//:FOR[PackedParts]:NEEDS[Regolith]//:AFTER[PackedParts&Squad]
+{
+	MODULE
+	{
+		name = REGO_ModuleResourceConverter
+		ConverterName = Pack RocketParks
+		StartActionName = Start Packing
+		StopActionName = Stop Packing
+		RecipeInputs = ElectricCharge,1000,RocketParts,100
+		RecipeOutputs = PackedParts,1,False
+	}
+	MODULE
+	{
+		name = REGO_ModuleResourceConverter
+		ConverterName = unPack PackedParks
+		StartActionName = Start unPacking
+		StopActionName = Stop unPacking
+		RecipeInputs = ElectricCharge,100,PackedParts,1
+		RecipeOutputs = RocketParts,100,False
+	}
+}
+
+// -- Old Converter method
+@Part[PartsPacker_*]:FOR[PackedParts]:NEEDS[!Regolith]//:AFTER[PackedParts]
+{
+	MODULE
+	{
+		name = ModuleGenerator
+		isAlwaysActive = false
+		activateGUIName = Start Packing RocketParts
+		shutdownGUIName = Stop Packing Parts
+		requiresAllinputs = true
+		resourceThreshold = 0.8
+	
+		INPUT_RESOURCE
+		{
+			name = ElectricCharge
+			rate = 1000
+		}
+		INPUT_RESOURCE
+		{
+			name = RocketParts
+			rate = 100
+		}
+		OUTPUT_RESOURCE
+		{
+			name = PackedParts
+			rate = 1
+		}
+	}
+	MODULE
+	{
+		name = ModuleGenerator
+		isAlwaysActive = false
+		activateGUIName = Start unPacking PackedParts
+		shutdownGUIName = Stop unPacking Parts
+		requiresAllinputs = true
+		resourceThreshold = 0.8
+	
+		INPUT_RESOURCE
+		{
+			name = ElectricCharge
+			rate = 100
+		}
+		INPUT_RESOURCE
+		{
+			name = PackedParts
+			rate = 1
+		}
+		OUTPUT_RESOURCE
+		{
+			name = RocketParts
+			rate = 100
+		}
+	}
+
+}
+
+	
